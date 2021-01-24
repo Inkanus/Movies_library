@@ -11,6 +11,7 @@ MOVIE_LISTS = [
     ("upcoming", "Upcoming")
 ]
 
+
 @app.route("/")
 def homepage():
     selected_list = request.args.get("list_type", "popular")
@@ -18,13 +19,15 @@ def homepage():
         selected_list = "popular"
     movies = tmdb_client.get_movies(12, selected_list)
     return render_template("homepage.html", movies=movies,
-        current_list=selected_list, all_lists=MOVIE_LISTS)
+                           current_list=selected_list, all_lists=MOVIE_LISTS)
+
 
 @app.route("/movie/<movie_id>")
 def movie_details(movie_id):
     details = tmdb_client.get_single_movie(movie_id)
     cast = tmdb_client.get_single_movie_cast(movie_id)[:8]
     return render_template("movie_details.html", movie=details, cast=cast)
+
 
 @app.context_processor
 def utility_processor():
@@ -34,4 +37,3 @@ def utility_processor():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
